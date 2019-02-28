@@ -53,9 +53,7 @@ import multiprocessing
 import tensorflow as tf
 
 from tensorflow.python.util import function_utils
-
-
-nest = tf.contrib.framework.nest
+from tensorflow.python.util import nest
 
 
 class _TFProxy(object):
@@ -139,7 +137,7 @@ class _TFProxy(object):
           in_.close()
           return
 
-        method_name = str(serialized[0])
+        method_name = serialized[0].decode()
         inputs = serialized[1:]
 
         # Compute result.
