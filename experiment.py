@@ -504,6 +504,7 @@ def train(action_set, level_names):
       agent = Agent(len(action_set))
 
       if is_single_machine() and 'dynamic_batching' in sys.modules:
+        print('using dynamic batching')
         # For single machine training, we use dynamic batching for improved GPU
         # utilization. The semantics of single machine training are slightly
         # different from the distributed setting because within a single unroll
@@ -601,6 +602,9 @@ def train(action_set, level_names):
           level_names_v, done_v, infos_v, num_env_frames_v, _ = session.run(
               (data_from_actors.level_name,) + output + (stage_op,))
           level_names_v = np.repeat([level_names_v], done_v.shape[0], 0)
+
+          tmp = [[a.decode() for a in b] for b in level_names_v]
+          level_names_v = np.array(tmp)
 
           for level_name, episode_return, episode_step in zip(
               level_names_v[done_v],
